@@ -2,7 +2,6 @@
 name = "book-learn"
 version = "0.1.0"
 description = "im making the worlds most complicated book app(as in follow all the best practices and write clean code)"
-repository = "https://github.com/PhantomInTheWire/worlds-most-complicated-book-app"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
