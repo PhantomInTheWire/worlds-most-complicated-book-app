@@ -48,4 +48,7 @@ dependencies = [
     "watchfiles==1.0.3",
     "websockets==14.1",
     "alembic>=1.14.0",
+    "passlib>=1.7.4",
+    "bcrypt>=4.2.1",
+    "pyjwt[crypto]>=2.10.1",
 ]
