@@ -14,12 +14,6 @@ async_engine = AsyncEngine(create_engine(
     echo=True
 ))
 
-
-async def initdb():
-    """create our database models in the database"""
-    async with async_engine.begin() as conn:
-        await conn.run_sync(SQLModel.metadata.create_all)
-
 async def get_session() -> AsyncSession:
     """Dependency to provide the session object"""
     async_session = sessionmaker(
