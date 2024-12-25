@@ -17,6 +17,8 @@ class User(SQLModel, table=True):
         )
     )
 
+    role: str = Field(
+        sa_column=Column(pg.VARCHAR, nullable=False, server_default="user"))
     username: str
     first_name: str = Field(nullable=True)
     last_name: str = Field(nullable=True)

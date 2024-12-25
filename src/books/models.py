@@ -1,3 +1,4 @@
+from typing import Optional
 from sqlmodel import SQLModel, Field
 import uuid
 from datetime import datetime
@@ -12,8 +13,9 @@ class Book(SQLModel, table=True):
     published_date: str
     page_count: int
     language: str
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    user_uid: Optional[uuid.UUID] = Field(default=None, foreign_key="user_accounts.uid")
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
 
     def __repr__(self) -> str:
         return f"<Book {self.title}>"
