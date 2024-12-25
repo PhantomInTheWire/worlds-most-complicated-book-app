@@ -24,7 +24,7 @@ def create_access_token(
         'exp': datetime.now() + (expiry if expiry is not None else timedelta(minutes=60)),
         'user': user_data,
         'jti': str(uuid.uuid4()),
-        refresh: refresh,
+        'refresh': refresh,
     }
     token = jwt.encode(
         payload=payload,
