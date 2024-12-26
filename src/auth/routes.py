@@ -1,7 +1,7 @@
-from datetime import timedelta
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import JSONResponse
 from .schemas import UserCreateModel, UserModel, UserLoginModel
+from .dependencies import RefreshTokenBearer, AccessTokenBearer, get_current_user
 from .service import UserService
 from src.db.main import get_session
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -9,7 +9,6 @@ from fastapi.exceptions import HTTPException
 from ..config import Config
 from .utils import verify_password, create_access_token
 from datetime import timedelta, datetime
-from .dependencies import RefreshTokenBearer, AccessTokenBearer
 from ..db.redis import add_jti_to_blocklist
 
 auth_router = APIRouter()
@@ -95,3 +94,7 @@ async def revoke_token(token_details:dict=Depends(AccessTokenBearer())):
         },
         status_code=status.HTTP_200_OK
     )
+
+@auth_router.get("/me", response_model=UserModel)
+async def get_current_user(user=Depends(get_current_user)):
+    return user
