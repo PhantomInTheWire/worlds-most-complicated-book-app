@@ -3,6 +3,7 @@ from .schemas import BookCreateModel, BookUpdateModel
 from sqlmodel import select, desc
 from .models import Book
 from datetime import datetime
+import uuid
 
 class BookService:
     async def get_all_books(self, session: AsyncSession):
@@ -30,7 +31,8 @@ class BookService:
     ):
         book_data_dict = book_data.model_dump()
         new_book = Book(**book_data_dict)
-        new_book.uid = user_uid
+        new_book.uid = str(uuid.uuid4())
+        new_book.user_uid = user_uid
         session.add(new_book)
         await session.commit()
         return new_book
