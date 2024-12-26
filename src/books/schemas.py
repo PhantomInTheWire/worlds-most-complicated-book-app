@@ -1,10 +1,5 @@
-from typing import List
-
 from pydantic import BaseModel
 from datetime import datetime
-from uuid import UUID
-from src.db.models import Review
-
 
 class Book(BaseModel):
     title: str
@@ -43,8 +38,6 @@ class BookResponseModel(BaseModel):
     language: str
     created_at: datetime
     updated_at: datetime
-    reviews: List[Review]
-
 
     class Config:
         orm_mode = True
