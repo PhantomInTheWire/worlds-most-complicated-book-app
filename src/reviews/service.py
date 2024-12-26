@@ -28,8 +28,6 @@ class ReviewService:
             user = await user_service.get_user_by_email(
                 email=user_email, session=session
             )
-            review_data_dict = review_data.model_dump()
-            new_review = Review(**review_data_dict)
 
             if not book:
                 raise HTTPException(
@@ -38,6 +36,8 @@ class ReviewService:
                 raise HTTPException(
                     detail="User not found", status_code=status.HTTP_404_NOT_FOUND)
 
+            review_data_dict = review_data.model_dump()
+            new_review = Review(**review_data_dict)
             new_review.user = user
             new_review.book = book
             session.add(new_review)
