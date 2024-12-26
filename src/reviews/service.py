@@ -64,9 +64,14 @@ class ReviewService:
     ):
         user = await user_service.get_user_by_email(user_email, session)
         review = await self.get_review(review_uid, session)
-        if not review or (review.user is not user):
+        if not review:
             raise HTTPException(
-                detail="Cannot delete this review",
+                detail="Review not found",
+                status_code=status.HTTP_404_NOT_FOUND,
+            )
+        if review.user.id != user.id:
+            raise HTTPException(
+                detail="Not authorized to delete this review",
                 status_code=status.HTTP_403_FORBIDDEN,
             )
 
