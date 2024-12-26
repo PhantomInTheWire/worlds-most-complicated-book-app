@@ -34,7 +34,7 @@ class BookCreateModel(BaseModel):
     language: str
 
 class BookResponseModel(BaseModel):
-    uid: UUID
+    uid: str
     title: str
     author: str
     publisher: str
