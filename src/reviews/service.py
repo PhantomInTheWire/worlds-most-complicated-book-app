@@ -36,7 +36,7 @@ class ReviewService:
                     detail="Book not found", status_code=status.HTTP_404_NOT_FOUND)
             if not user:
                 raise HTTPException(
-                    detail="Book not found", status_code=status.HTTP_404_NOT_FOUND)
+                    detail="User not found", status_code=status.HTTP_404_NOT_FOUND)
 
             new_review.user = user
             new_review.book = book
