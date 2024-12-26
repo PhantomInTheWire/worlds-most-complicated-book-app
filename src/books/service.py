@@ -4,6 +4,8 @@ from sqlmodel import select, desc
 from .models import Book
 from datetime import datetime
 import uuid
+from ..auth.models import User
+
 
 class BookService:
     async def get_all_books(self, session: AsyncSession):
@@ -17,27 +19,29 @@ class BookService:
         book = result.first()
         return book if book is not None else None
 
-    async def create_book(self, book_data: BookCreateModel, session: AsyncSession):
-        book_data_dict = book_data.model_dump()
-        book_data_dict['uid'] = uuid.uuid4()
-        new_book = Book(
-            **book_data_dict
+    async def get_user_books(self, user_uid: str, session: AsyncSession):
+        user_exist_statement = select(User).where(User.uid == user_uid)
+        user = await session.exec(user_exist_statement)
+        if not user.first():
+            raise ValueError("Invalid user_uid provided")
+        statement = (
+            select(Book)
+            .where(Book.user_uid == user_uid)
+            .order_by(desc(Book.created_at))
         )
+        result = await session.exec(statement)
+        return result.all()
+
+    async def create_book(
+            self, book_data: BookCreateModel, user_uid: str, session: AsyncSession
+    ):
+        book_data_dict = book_data.model_dump()
+        new_book = Book(**book_data_dict)
+        new_book.uid = str(uuid.uuid4())
+        new_book.user_uid = user_uid
         session.add(new_book)
         await session.commit()
-        await session.refresh(new_book)
-
-        return {
-            "uid": str(new_book.uid),
-            "title": new_book.title,
-            "author": new_book.author,
-            "publisher": new_book.publisher,
-            "published_date": new_book.published_date,
-            "page_count": new_book.page_count,
-            "language": new_book.language,
-            "created_at": new_book.created_at,
-            "updated_at": new_book.updated_at,
-        }
+        return new_book
 
     async def update_book(
         self, book_uid: str,
