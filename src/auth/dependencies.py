@@ -1,11 +1,9 @@
 from typing import List, Any
-
 from fastapi import HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlmodel.ext.asyncio.session import AsyncSession
 from starlette import status
-
-from src.auth.models import User
+from src.db.models import User
 from src.auth.service import UserService
 from src.auth.utils import decode_token
 from fastapi import Request

@@ -12,7 +12,7 @@ book_service = BookService()
 access_token_bearer = AccessTokenBearer()
 role_checker = Depends(RoleChecker(["admin", "user"]))
 
-@book_router.get("/", response_model=List[Book])
+@book_router.get("/", response_model=List[BookResponseModel])
 async def get_all_books(
         session: AsyncSession = Depends(get_session),
         token_details = Depends(access_token_bearer)
@@ -33,10 +33,10 @@ async def create_a_book(
     token_details: dict = Depends(access_token_bearer),
 ) -> dict:
     user_id = token_details.get("user")["user_uid"]
-    new_book = await book_service.create_book(book_data, user_id, session) # change this
+    new_book = await book_service.create_book(book_data, user_id, session)
     return new_book
 
-@book_router.get("/{book_uid}", response_model=Book)
+@book_router.get("/{book_uid}", response_model=BookResponseModel)
 async def get_book(
         book_uid: str,
         session: AsyncSession = Depends(get_session),
@@ -50,7 +50,7 @@ async def get_book(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Book not found")
 
 
-@book_router.patch("/{book_uid}", response_model=Book)
+@book_router.patch("/{book_uid}", response_model=BookResponseModel)
 async def update_book(
         book_uid: str,
         book_update_data: BookUpdateModel,
