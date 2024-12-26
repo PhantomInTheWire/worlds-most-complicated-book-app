@@ -4,6 +4,8 @@ from sqlmodel import select, desc
 from .models import Book
 from datetime import datetime
 import uuid
+from ..auth.models import User
+
 
 class BookService:
     async def get_all_books(self, session: AsyncSession):
@@ -18,6 +20,10 @@ class BookService:
         return book if book is not None else None
 
     async def get_user_books(self, user_uid: str, session: AsyncSession):
+        user_exist_statement = select(User).where(User.uid == user_uid)
+        user = await session.exec(user_exist_statement)
+        if not user.first():
+            raise ValueError("Invalid user_uid provided")
         statement = (
             select(Book)
             .where(Book.user_uid == user_uid)
