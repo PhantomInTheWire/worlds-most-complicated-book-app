@@ -46,10 +46,8 @@ class ReviewService:
 
         except Exception as e:
             logging.exception(e)
-            raise HTTPException(
-                detail="Oops... somethig went wrong!",
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
+            raise HTTPException(detail="Oops... something went wrong!",
+                        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR) from e
 
     async def get_review(self, review_uid: str, session: AsyncSession):
         statement = select(Review).where(Review.uid == review_uid)
