@@ -7,7 +7,6 @@ from ..config import Config
 
 async_engine = AsyncEngine(create_engine(
     url = Config.DB_URL,
-    echo=True
 ))
 
 async def get_session() -> AsyncSession:
@@ -18,4 +17,3 @@ async def get_session() -> AsyncSession:
 
     async with async_session() as session:
         yield session
-
