@@ -17,7 +17,6 @@ server_error = HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
 class TagService:
     async def get_tags(self, session: AsyncSession):
         """Get all tags"""
-
         statement = select(Tag).order_by(desc(Tag.created_at))
         result = await session.exec(statement)
         return result.all()
