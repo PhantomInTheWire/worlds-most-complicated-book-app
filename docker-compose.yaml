@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: 
+      - sh
+      - -c
+      - ". .venv/bin/activate && fastapi run src/ --port 8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    networks:
+      - mynetwork
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
